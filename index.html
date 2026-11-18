@@ -3,28 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Ranking Comparison: Word Frequency vs. PageRank</title>
+  <title>Google! (1998) - Search Ranking Comparison: Word Frequency vs. PageRank</title>
   <style>
     /* ==========================================================================
-       1. CSS VARIABLES & COSMIC THEME SETUP
+       1. COSMIC BACKGROUND & 3D ROTATING SPACE DICE
+       Kept exactly as requested: dark starry universe with floating tumbling dice
        ========================================================================== */
-    :root {
-      --bg-space: #05070f;
-      --panel-bg: rgba(14, 20, 36, 0.82);
-      --panel-border: rgba(255, 255, 255, 0.12);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-cyan: #38bdf8;
-      --accent-purple: #a855f7;
-      --accent-amber: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-green: #10b981;
-      --bar-old: linear-gradient(90deg, #f59e0b, #ef4444);
-      --bar-pagerank: linear-gradient(90deg, #38bdf8, #818cf8);
-      --font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -32,18 +16,15 @@
     }
 
     body {
-      font-family: var(--font-stack);
-      background-color: var(--bg-space);
-      color: var(--text-main);
+      background-color: #060814;
+      font-family: "Times New Roman", Times, Georgia, serif;
+      color: #000000;
       min-height: 100vh;
-      line-height: 1.5;
+      line-height: 1.4;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* ==========================================================================
-       2. BACKGROUND: COSMIC UNIVERSE & ROTATING 3D DICE
-       ========================================================================== */
     #space-background {
       position: fixed;
       top: 0;
@@ -53,10 +34,9 @@
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      background: radial-gradient(ellipse at bottom, #151d2a 0%, #05070e 100%);
     }
 
-    /* Starry Canvas */
     #stars-canvas {
       position: absolute;
       top: 0;
@@ -65,7 +45,6 @@
       height: 100%;
     }
 
-    /* Optional User Custom Dice Image Background Layer */
     #user-dice-layer {
       position: absolute;
       top: 0;
@@ -79,13 +58,13 @@
       mix-blend-mode: screen;
     }
 
-    /* Realistic 3D CSS Space Dice Container */
+    /* 3D Tumbling Space Dice */
     .dice-universe-stage {
       position: absolute;
-      top: 25%;
-      right: 12%;
-      width: 160px;
-      height: 160px;
+      top: 20%;
+      right: 8%;
+      width: 150px;
+      height: 150px;
       perspective: 900px;
       opacity: 0.85;
       transition: transform 0.3s ease;
@@ -99,51 +78,45 @@
       animation: tumbleDice 24s linear infinite;
     }
 
-    /* Slow, natural cosmic tumbling */
     @keyframes tumbleDice {
-      0% {
-        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0);
-      }
-      25% {
-        transform: rotateX(90deg) rotateY(180deg) rotateZ(45deg) translateY(-25px);
-      }
-      50% {
-        transform: rotateX(180deg) rotateY(360deg) rotateZ(90deg) translateY(0);
-      }
-      75% {
-        transform: rotateX(270deg) rotateY(540deg) rotateZ(135deg) translateY(25px);
-      }
-      100% {
-        transform: rotateX(360deg) rotateY(720deg) rotateZ(180deg) translateY(0);
-      }
+      0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0); }
+      25% { transform: rotateX(90deg) rotateY(180deg) rotateZ(45deg) translateY(-25px); }
+      50% { transform: rotateX(180deg) rotateY(360deg) rotateZ(90deg) translateY(0); }
+      75% { transform: rotateX(270deg) rotateY(540deg) rotateZ(135deg) translateY(25px); }
+      100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(180deg) translateY(0); }
     }
 
-    /* 3D Dice Faces */
     .dice-face {
       position: absolute;
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
       background: radial-gradient(circle at 30% 30%, #ffffff 0%, #dcdfe4 65%, #94a3b8 100%);
       border: 2px solid rgba(255, 255, 255, 0.4);
-      border-radius: 22px;
-      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.4), 0 0 25px rgba(56, 189, 248, 0.25);
+      border-radius: 20px;
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.4), 0 0 25px rgba(56, 189, 248, 0.3);
       display: grid;
-      padding: 16px;
+      padding: 15px;
       backface-visibility: visible;
     }
 
-    /* Precise 3D Translations for 160px Cube */
-    .face-1 { transform: rotateY(0deg) translateZ(80px); }
-    .face-2 { transform: rotateY(90deg) translateZ(80px); }
-    .face-3 { transform: rotateY(180deg) translateZ(80px); }
-    .face-4 { transform: rotateY(-90deg) translateZ(80px); }
-    .face-5 { transform: rotateX(90deg) translateZ(80px); }
-    .face-6 { transform: rotateX(-90deg) translateZ(80px); }
+    .face-1 { transform: rotateY(0deg) translateZ(75px); display: flex; justify-content: center; align-items: center; }
+    .face-2 { transform: rotateY(90deg) translateZ(75px); display: flex; justify-content: space-between; }
+    .face-2 .pip:nth-child(2) { align-self: flex-end; }
+    .face-3 { transform: rotateY(180deg) translateZ(75px); display: flex; justify-content: space-between; }
+    .face-3 .pip:nth-child(2) { align-self: center; }
+    .face-3 .pip:nth-child(3) { align-self: flex-end; }
+    .face-4 { transform: rotateY(-90deg) translateZ(75px); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+    .face-5 { transform: rotateX(90deg) translateZ(75px); display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+    .face-5 .pip:nth-child(1) { grid-area: 1 / 1; }
+    .face-5 .pip:nth-child(2) { grid-area: 1 / 3; }
+    .face-5 .pip:nth-child(3) { grid-area: 2 / 2; }
+    .face-5 .pip:nth-child(4) { grid-area: 3 / 1; }
+    .face-5 .pip:nth-child(5) { grid-area: 3 / 3; }
+    .face-6 { transform: rotateX(-90deg) translateZ(75px); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 6px; }
 
-    /* Dice Pips */
     .pip {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       background: radial-gradient(circle at 35% 35%, #2a2a2a 0%, #000000 80%);
       border-radius: 50%;
       align-self: center;
@@ -154,421 +127,366 @@
       background: radial-gradient(circle at 35% 35%, #ef4444 0%, #991b1b 80%);
     }
 
-    /* Face Layouts */
-    .face-1 { display: flex; justify-content: center; align-items: center; }
-    .face-2 { display: flex; justify-content: space-between; }
-    .face-2 .pip:nth-child(2) { align-self: flex-end; }
-    .face-3 { display: flex; justify-content: space-between; }
-    .face-3 .pip:nth-child(2) { align-self: center; }
-    .face-3 .pip:nth-child(3) { align-self: flex-end; }
-    .face-4 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-    .face-5 { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
-    .face-5 .pip:nth-child(1) { grid-area: 1 / 1; }
-    .face-5 .pip:nth-child(2) { grid-area: 1 / 3; }
-    .face-5 .pip:nth-child(3) { grid-area: 2 / 2; }
-    .face-5 .pip:nth-child(4) { grid-area: 3 / 1; }
-    .face-5 .pip:nth-child(5) { grid-area: 3 / 3; }
-    .face-6 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 8px; }
-
     /* ==========================================================================
-       3. FOREGROUND APP CONTENT & SEMI-TRANSPARENT PANELS
+       2. RETRO 1998 GOOGLE INTERFACE STYLES (SEMI-TRANSPARENT PANELS)
        ========================================================================== */
-    .app-wrapper {
+    .retro-container {
       position: relative;
       z-index: 10;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2.2rem 1.5rem 4rem;
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 1.5rem;
     }
 
-    /* Header */
-    header {
+    /* Main Window: Netscape/1998 Web Style Card with Glass Translucency */
+    .retro-window {
+      background: rgba(245, 245, 245, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 3px outset #ffffff;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 1px 1px 0 #ffffff;
+      border-radius: 4px;
+      padding: 1.75rem 2rem;
+    }
+
+    /* 1998 Google! Multi-Color Logo */
+    .google-logo-wrapper {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
     }
 
-    header h1 {
-      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #f8fafc 0%, #38bdf8 60%, #a855f7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.6rem;
+    .google-logo {
+      font-size: clamp(3.2rem, 7vw, 5.2rem);
+      font-weight: bold;
+      letter-spacing: -2px;
+      display: inline-block;
+      text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.25);
+      user-select: none;
     }
 
-    header p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 800px;
-      margin: 0 auto;
+    .g-blue   { color: #245dc1; }
+    .g-red    { color: #d93025; }
+    .g-yellow { color: #f4b400; }
+    .g-green  { color: #0f9d58; }
+
+    .beta-badge {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #0f9d58;
+      font-weight: bold;
+      margin-left: 4px;
+      vertical-align: super;
     }
 
-    /* Control Panel Box */
-    .control-panel {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--panel-border);
-      border-radius: 16px;
-      padding: 1.5rem 1.8rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      gap: 1.4rem;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      flex: 1 1 200px;
-    }
-
-    .input-group label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .input-group input {
-      background: rgba(8, 12, 22, 0.75);
-      border: 1px solid var(--panel-border);
-      color: var(--text-main);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .input-group input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-    }
-
-    .btn-run {
-      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-      color: #ffffff;
-      font-weight: 700;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8rem 2.2rem;
-      font-size: 1.05rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      height: 48px;
-    }
-
-    .btn-run:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(56, 189, 248, 0.55);
-      background: linear-gradient(135deg, #7dd3fc 0%, #1d4ed8 100%);
-    }
-
-    /* Background Customizer Switch */
-    .bg-custom-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .bg-custom-pill label {
-      cursor: pointer;
-      color: var(--accent-cyan);
-      text-decoration: underline;
-      font-weight: 600;
-    }
-
-    .bg-custom-pill input[type="file"] {
-      display: none;
-    }
-
-    /* Key Insight Highlight Banner */
-    .spam-insight-banner {
-      background: linear-gradient(90deg, rgba(239, 68, 68, 0.18) 0%, rgba(168, 85, 247, 0.15) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      border-radius: 12px;
-      padding: 1.1rem 1.4rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.1rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    }
-
-    .spam-badge-icon {
-      font-size: 2rem;
-      line-height: 1;
-    }
-
-    .spam-insight-content h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fca5a5;
-      margin-bottom: 0.2rem;
-    }
-
-    .spam-insight-content p {
-      font-size: 0.92rem;
-      color: #e2e8f0;
-      line-height: 1.5;
-    }
-
-    .spam-insight-content strong {
-      color: #fef08a;
-    }
-
-    /* ==========================================================================
-       4. COMPARISON SIDE-BY-SIDE LAYOUT
-       ========================================================================== */
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.8rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .ranking-card {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--panel-border);
-      border-radius: 16px;
-      padding: 1.6rem;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .ranking-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      border-bottom: 1px solid var(--panel-border);
-      padding-bottom: 1rem;
+    .stanford-tagline {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #333333;
       margin-bottom: 1.25rem;
     }
 
-    .ranking-header h2 {
-      font-size: 1.35rem;
-      font-weight: 700;
+    /* Retro 1998 Search Form Box */
+    .retro-search-box {
+      background: #e8e8e8;
+      border: 2px inset #ffffff;
+      padding: 1.25rem;
+      max-width: 780px;
+      margin: 0 auto 1.75rem;
+      text-align: center;
+    }
+
+    .retro-search-label {
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      display: block;
+      color: #000000;
+    }
+
+    .retro-input-row {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .method-tag {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .tag-old {
-      background: rgba(245, 158, 11, 0.18);
-      color: #fcd34d;
-      border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-
-    .tag-pagerank {
-      background: rgba(56, 189, 248, 0.18);
-      color: #7dd3fc;
-      border: 1px solid rgba(56, 189, 248, 0.35);
-    }
-
-    /* Ranked Tables */
-    .table-container {
-      overflow-x: auto;
+      gap: 0.75rem;
+      flex-wrap: wrap;
       margin-bottom: 1rem;
     }
 
-    table {
+    .retro-input {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 1rem;
+      padding: 5px 8px;
+      background: #ffffff;
+      border: 2px inset #999999;
+      color: #000000;
+    }
+
+    .retro-input:focus {
+      outline: 1px dotted #000080;
+    }
+
+    .retro-input-n {
+      width: 100px;
+    }
+
+    .retro-input-word {
+      width: 220px;
+    }
+
+    .retro-btn {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 0.95rem;
+      padding: 4px 14px;
+      background: #dfdfdf;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #707070;
+      border-bottom: 2px solid #707070;
+      color: #000000;
+      cursor: pointer;
+      font-weight: normal;
+    }
+
+    .retro-btn:active {
+      border-top: 2px solid #707070;
+      border-left: 2px solid #707070;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      background: #cecece;
+    }
+
+    .retro-btn-lucky {
+      margin-left: 6px;
+    }
+
+    /* 1998 Quick Links Menu Bar */
+    .retro-sub-menu {
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+    }
+
+    .retro-sub-menu a, a {
+      color: #0000cc;
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #551a8b;
+    }
+
+    a:hover {
+      color: #ff0000;
+    }
+
+    /* Background Dice Upload Bar (1998 Style) */
+    .retro-bg-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: #444444;
+      background: #f0f0f0;
+      border: 1px solid #bbbbbb;
+      padding: 3px 8px;
+    }
+
+    .retro-bg-controls input[type="file"] {
+      display: none;
+    }
+
+    /* Keyword Spam Warning Callout (1998 Netscape Alert Box) */
+    .retro-alert-table {
+      width: 100%;
+      background: #ffffcc;
+      border: 2px solid #cc0000;
+      margin: 1.5rem 0;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+    }
+
+    .retro-alert-title {
+      font-weight: bold;
+      color: #cc0000;
+      margin-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    /* 1998 Side-by-Side Comparison Layout */
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.8rem 0;
+    }
+
+    .retro-panel {
+      background: #ffffff;
+      border: 2px inset #aaaaaa;
+      padding: 1rem;
+    }
+
+    .retro-panel-header {
+      background: #d4d0c8;
+      border: 1px solid #808080;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .retro-panel-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #000080;
+    }
+
+    .retro-badge-tag {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.78rem;
+      background: #ffffff;
+      border: 1px solid #707070;
+      padding: 1px 5px;
+    }
+
+    .panel-meta-info {
+      font-size: 0.82rem;
+      color: #444444;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+
+    /* Retro Tables */
+    .retro-table {
       width: 100%;
       border-collapse: collapse;
+      border: 2px solid #808080;
+      font-size: 0.88rem;
+      margin-top: 6px;
+    }
+
+    .retro-table th {
+      background: #e0e0e0;
+      border: 1px solid #808080;
+      padding: 5px 6px;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.82rem;
+      color: #000000;
     }
 
-    th {
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 0.6rem 0.75rem;
-      border-bottom: 1px solid var(--panel-border);
-    }
-
-    td {
-      padding: 0.75rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    .retro-table td {
+      border: 1px solid #b0b0b0;
+      padding: 6px;
       vertical-align: middle;
+      color: #000000;
     }
 
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .rank-num {
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--text-muted);
+    .rank-td {
+      font-weight: bold;
       width: 32px;
+      text-align: center;
     }
 
-    .rank-top-1 { color: #f59e0b; }
-    .rank-top-2 { color: #cbd5e1; }
-    .rank-top-3 { color: #d97706; }
+    .rank-1 { color: #d93025; font-size: 1rem; }
 
-    .page-id-badge {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      padding: 0.15rem 0.45rem;
-      background: rgba(255, 255, 255, 0.07);
-      border-radius: 4px;
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .page-url {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: #e2e8f0;
+    .retro-url-text {
+      color: #0000cc;
+      font-weight: bold;
       word-break: break-all;
     }
 
-    .page-url-sub {
+    .retro-snippet {
       font-size: 0.75rem;
-      color: var(--text-muted);
+      color: #555555;
+      font-family: sans-serif;
       margin-top: 2px;
     }
 
-    /* Special Highlight for Page 6 Keyword Spam */
-    tr.highlight-spam {
-      background: rgba(239, 68, 68, 0.12);
-      border-left: 3px solid var(--accent-red);
+    /* 1998 Highlight Rows */
+    tr.retro-spam-row {
+      background-color: #ffe6e6;
     }
 
-    tr.highlight-winner {
-      background: rgba(16, 185, 129, 0.12);
-      border-left: 3px solid var(--accent-green);
+    tr.retro-winner-row {
+      background-color: #e6ffe6;
     }
 
-    /* Relative Visual Bars */
-    .score-cell {
-      min-width: 130px;
+    /* 1998 Style Beveled Progress Bars */
+    .retro-bar-wrap {
+      width: 100%;
+      height: 12px;
+      background: #ffffff;
+      border: 1px inset #999999;
+      padding: 1px;
     }
 
-    .score-num {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 0.9rem;
+    .retro-bar-fill-old {
+      height: 100%;
+      background: #cc6600;
+      transition: width 0.3s ease;
+    }
+
+    .retro-bar-fill-pagerank {
+      height: 100%;
+      background: #0000cc;
+      transition: width 0.3s ease;
+    }
+
+    /* 1998 Iteration Progression Section */
+    .retro-progression-box {
+      background: #ffffff;
+      border: 2px inset #aaaaaa;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .retro-progression-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #000080;
       margin-bottom: 4px;
     }
 
-    .bar-track {
-      width: 100%;
-      height: 7px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-      overflow: hidden;
+    .retro-progression-table th {
+      background: #dcdcdc;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.82rem;
     }
 
-    .bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    .retro-progression-table td {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.82rem;
     }
 
-    .bar-old-fill { background: var(--bar-old); }
-    .bar-pagerank-fill { background: var(--bar-pagerank); }
-
-    /* ==========================================================================
-       5. PAGERANK ITERATION CONVERGENCE PROGRESSION
-       ========================================================================== */
-    .progression-section {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--panel-border);
-      border-radius: 16px;
-      padding: 1.8rem;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
-      margin-bottom: 2rem;
-    }
-
-    .progression-section h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .progression-section p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .progression-table th {
-      font-family: var(--font-mono);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .progression-table td {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-    }
-
-    /* Footer */
-    footer {
+    /* 1998 Stanford / Google Footer */
+    .retro-footer {
       text-align: center;
-      padding-top: 1.5rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #999999;
+      font-size: 0.82rem;
+      color: #444444;
     }
 
-    /* ==========================================================================
-       6. RESPONSIVE MEDIA QUERIES
-       ========================================================================== */
-    @media (max-width: 980px) {
-      .comparison-grid {
+    .retro-footer-links {
+      margin-bottom: 0.4rem;
+    }
+
+    .retro-footer-links a {
+      margin: 0 6px;
+    }
+
+    /* Responsive for Small Screens */
+    @media (max-width: 850px) {
+      .comparison-row {
         grid-template-columns: 1fr;
       }
       .dice-universe-stage {
-        display: none; /* Hide background 3D dice on small screens to keep UI crisp */
+        display: none;
       }
-    }
-
-    @media (max-width: 640px) {
-      .control-panel {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .btn-run {
-        width: 100%;
-        justify-content: center;
+      .retro-window {
+        padding: 1rem;
       }
     }
   </style>
@@ -586,196 +504,169 @@
     <!-- Realistic 3D Rotating Space Dice -->
     <div class="dice-universe-stage" aria-hidden="true" id="css-dice-stage">
       <div class="cube-dice">
-        <!-- Face 1 -->
-        <div class="dice-face face-1">
-          <div class="pip red"></div>
-        </div>
-        <!-- Face 2 -->
-        <div class="dice-face face-2">
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <!-- Face 3 -->
-        <div class="dice-face face-3">
-          <div class="pip"></div>
-          <div class="pip red"></div>
-          <div class="pip"></div>
-        </div>
-        <!-- Face 4 -->
-        <div class="dice-face face-4">
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <!-- Face 5 -->
-        <div class="dice-face face-5">
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip red"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <!-- Face 6 -->
-        <div class="dice-face face-6">
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
+        <div class="dice-face face-1"><div class="pip red"></div></div>
+        <div class="dice-face face-2"><div class="pip"></div><div class="pip"></div></div>
+        <div class="dice-face face-3"><div class="pip"></div><div class="pip red"></div><div class="pip"></div></div>
+        <div class="dice-face face-4"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        <div class="dice-face face-5"><div class="pip"></div><div class="pip"></div><div class="pip red"></div><div class="pip"></div><div class="pip"></div></div>
+        <div class="dice-face face-6"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== FOREGROUND CONTENT ==================== -->
-  <div class="app-wrapper">
+  <!-- ==================== 1998 GOOGLE INTERFACE (SEMI-TRANSPARENT PANEL) ==================== -->
+  <div class="retro-container">
+    <div class="retro-window">
 
-    <!-- Header Section -->
-    <header>
-      <h1>Search Ranking Comparison</h1>
-      <p>
-        Compare how the <strong>Old Way (Word Frequency)</strong> ranks web pages vs. how Google's revolutionary <strong>PageRank Algorithm</strong> solves keyword spam through authority link graphs.
-      </p>
-    </header>
-
-    <!-- Interactive Controls Bar -->
-    <section class="control-panel">
-      <!-- Input: Iterations N -->
-      <div class="input-group">
-        <label for="input-iterations">Iterations / Rounds (N: 1 to 10,000)</label>
-        <input type="number" id="input-iterations" min="1" max="10000" value="20" required>
-      </div>
-
-      <!-- Input: Search Word -->
-      <div class="input-group">
-        <label for="input-word">Search Word</label>
-        <input type="text" id="input-word" value="pizza" required>
-      </div>
-
-      <!-- Run Button -->
-      <button class="btn-run" id="btn-run" type="button">
-        <span>▶ Run Comparison</span>
-      </button>
-
-      <!-- Background Dice Customizer -->
-      <div class="bg-custom-pill">
-        <span>🎲 Background: 3D Space Dice</span>
-        <label for="dice-upload-input">Upload Dice Photo</label>
-        <input type="file" id="dice-upload-input" accept="image/*">
-        <button id="btn-reset-bg" style="display:none; background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; text-decoration:underline;">Reset</button>
-      </div>
-    </section>
-
-    <!-- Key Insight Alert Banner -->
-    <aside class="spam-insight-banner">
-      <div class="spam-badge-icon">⚠️</div>
-      <div class="spam-insight-content">
-        <h3>The Keyword Spam Flaw Revealed</h3>
-        <p id="spam-insight-text">
-          Notice <strong>Page 6 (pizza-pizza-pizza.com)</strong>: It stuffed the search word "pizza" 10 times to rig the <em>Old Way</em> at Rank #1. But in <em>PageRank</em>, it plunges to the bottom because <strong>no reputable website links to it</strong>! Meanwhile, <strong>Page 2 (best-pizza-pune.com)</strong> receives links from 4 other sites, capturing true authority.
-        </p>
-      </div>
-    </aside>
-
-    <!-- Side-by-Side Comparison -->
-    <div class="comparison-grid">
-
-      <!-- LEFT SIDE: Old Way (Word Frequency) -->
-      <section class="ranking-card">
-        <div class="ranking-header">
-          <h2><span>📄</span> Old Way</h2>
-          <span class="method-tag tag-old">Word Frequency</span>
+      <!-- 1998 Google! Logo -->
+      <div class="google-logo-wrapper">
+        <div class="google-logo" title="Google! (1998 Prototype)">
+          <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span><span class="g-green">!</span>
+          <span class="beta-badge">Beta</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Ranks pages purely by how many times the search term appears in text. Evaluated over <span id="label-runs-count">20</span> query rounds.
-        </p>
+      </div>
 
-        <div class="table-container">
-          <table id="table-old-way">
+      <div class="stanford-tagline">
+        Stanford University Search Engine Research Project &bull; Sergey Brin &amp; Lawrence Page
+      </div>
+
+      <!-- 1998 Search Controls Box -->
+      <div class="retro-search-box">
+        <span class="retro-search-label">Search the web using Google!</span>
+
+        <div class="retro-input-row">
+          <label for="input-word" style="font-size:0.95rem;"><strong>Query:</strong></label>
+          <input type="text" id="input-word" class="retro-input retro-input-word" value="pizza" required>
+
+          <label for="input-iterations" style="font-size:0.95rem;"><strong>Iterations (N: 1-10000):</strong></label>
+          <input type="number" id="input-iterations" class="retro-input retro-input-n" min="1" max="10000" value="20" required>
+        </div>
+
+        <div>
+          <button type="button" class="retro-btn" id="btn-run">Google Search (Run Comparison)</button>
+          <button type="button" class="retro-btn retro-btn-lucky" id="btn-lucky">I'm feeling lucky</button>
+        </div>
+
+        <div class="retro-sub-menu">
+          <a href="#old-way">Word Frequency</a> &bull;
+          <a href="#pagerank">PageRank Algorithm</a> &bull;
+          <a href="#progression">Iteration Progression</a>
+        </div>
+
+        <!-- 1998 Style Dice Upload Control -->
+        <div class="retro-bg-controls">
+          <span>Background: 3D Space Dice</span> |
+          <label for="dice-upload-input" style="cursor:pointer; color:#0000cc; text-decoration:underline;">[ Upload Custom Dice Photo ]</label>
+          <input type="file" id="dice-upload-input" accept="image/*">
+          <button id="btn-reset-bg" style="display:none; background:none; border:none; color:#cc0000; cursor:pointer; font-size:0.8rem; text-decoration:underline;">[ Reset Background ]</button>
+        </div>
+      </div>
+
+      <!-- 1998 Alert: Keyword Spamming vs PageRank -->
+      <div class="retro-alert-table">
+        <div class="retro-alert-title">*** SPECIAL NOTICE: Why PageRank Overcomes Keyword Spamming ***</div>
+        <p>
+          In traditional 1990s search engines, <strong>Page 6 (pizza-pizza-pizza.com)</strong> manipulates the results into <strong>Rank #1</strong> by repeating the word <em>"pizza"</em> 10 times in its text. 
+          Google's new <strong>PageRank</strong> algorithm exposes this spam: because <strong>zero pages link to Page 6</strong>, its authority score drops to dead last! 
+          Conversely, <strong>Page 2 (best-pizza-pune.com)</strong> earns the highest PageRank because 4 community websites independently link to it.
+        </p>
+      </div>
+
+      <!-- 1998 Comparison Side-by-Side Row -->
+      <div class="comparison-row">
+
+        <!-- LEFT PANEL: Old Way (Word Frequency) -->
+        <div class="retro-panel" id="old-way">
+          <div class="retro-panel-header">
+            <span class="retro-panel-title">Old Way: Word Frequency</span>
+            <span class="retro-badge-tag">Rounds: <span id="label-runs-count">20</span></span>
+          </div>
+          <div class="panel-meta-info">
+            Sorts web pages purely by term density. Evaluated over exactly N repeated runs.
+          </div>
+
+          <table class="retro-table" id="table-old-way">
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>Page</th>
-                <th>URL</th>
-                <th>Occurrences</th>
-                <th class="score-cell">Density Bar</th>
+                <th style="width:34px;">Rank</th>
+                <th style="width:40px;">ID</th>
+                <th>URL &amp; Snippet</th>
+                <th style="width:75px;">Matches</th>
+                <th style="width:70px;">Density</th>
               </tr>
             </thead>
             <tbody id="tbody-old-way">
-              <!-- Populated dynamically via JS -->
+              <!-- Rendered via JS -->
             </tbody>
           </table>
         </div>
-      </section>
 
-      <!-- RIGHT SIDE: PageRank -->
-      <section class="ranking-card">
-        <div class="ranking-header">
-          <h2><span>🕸️</span> PageRank</h2>
-          <span class="method-tag tag-pagerank">Link Graph (d = 0.85)</span>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Calculates authority based on the web's hyperlink graph after exactly <span id="label-pagerank-iterations">20</span> iterations.
-        </p>
+        <!-- RIGHT PANEL: PageRank -->
+        <div class="retro-panel" id="pagerank">
+          <div class="retro-panel-header">
+            <span class="retro-panel-title">Google! PageRank Algorithm</span>
+            <span class="retro-badge-tag">d = 0.85 &bull; N = <span id="label-pagerank-iterations">20</span></span>
+          </div>
+          <div class="panel-meta-info">
+            Evaluates the random-surfer hyperlink topology after exactly N iterations.
+          </div>
 
-        <div class="table-container">
-          <table id="table-pagerank">
+          <table class="retro-table" id="table-pagerank">
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>Page</th>
-                <th>URL</th>
-                <th>Score</th>
-                <th class="score-cell">Authority Bar</th>
+                <th style="width:34px;">Rank</th>
+                <th style="width:40px;">ID</th>
+                <th>URL &amp; In-Links</th>
+                <th style="width:85px;">Score</th>
+                <th style="width:70px;">Authority</th>
               </tr>
             </thead>
             <tbody id="tbody-pagerank">
-              <!-- Populated dynamically via JS -->
+              <!-- Rendered via JS -->
             </tbody>
           </table>
         </div>
-      </section>
 
-    </div>
+      </div>
 
-    <!-- PAGERANK PROGRESSION OVER ITERATIONS -->
-    <section class="progression-section">
-      <h3><span>📈</span> PageRank Score Convergence Over Iterations</h3>
-      <p>
-        Observe how the probability scores stabilize as iterations increase toward mathematical convergence:
-      </p>
+      <!-- PAGERANK CONVERGENCE PROGRESSION TABLE -->
+      <div class="retro-progression-box" id="progression">
+        <div class="retro-progression-title">PageRank Convergence Table (Iterations 1 to N)</div>
+        <p style="font-size:0.85rem; color:#444444; margin-bottom:8px;">
+          Calculates the step-by-step probability distribution as the power iteration method converges:
+        </p>
 
-      <div class="table-container">
-        <table class="progression-table" id="table-progression">
+        <table class="retro-table retro-progression-table" id="table-progression">
           <thead>
             <tr id="progression-header-row">
               <th>Page</th>
               <th>URL</th>
-              <!-- Milestones populated dynamically (e.g. Iter 1, Iter 10, Iter N) -->
             </tr>
           </thead>
           <tbody id="tbody-progression">
-            <!-- Populated dynamically via JS -->
+            <!-- Rendered via JS -->
           </tbody>
         </table>
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-      <p>Single-file pure HTML, CSS &amp; JavaScript implementation &bull; Damping factor: 0.85</p>
-    </footer>
+      <!-- 1998 Retro Footer -->
+      <div class="retro-footer">
+        <div class="retro-footer-links">
+          <a href="#">About Google!</a> |
+          <a href="#">Stanford University Search</a> |
+          <a href="#">Linux Search</a> |
+          <a href="#">Help &amp; Documentation</a>
+        </div>
+        <p>Copyright &copy;1998 Google Inc. &bull; Prototype Version running under Netscape Navigator / Mosaic compatible layout</p>
+      </div>
 
+    </div>
   </div>
 
-  <!-- ==========================================================================
-       7. JAVASCRIPT LOGIC & ALGORITHMS
-       ========================================================================== -->
+  <!-- ==================== JAVASCRIPT: DATA & ALGORITHMS ==================== -->
   <script>
     /**
-     * RAW DATASET PROVIDED IN INSTRUCTIONS:
+     * EXACT DATASET SPECIFIED:
      * Format: page,url,text,links_to (links separated by ;)
      */
     const RAW_DATA = `1,pune-food-guide.com,Where to eat in Pune - vada pav and biryani and pizza,2
@@ -786,7 +677,7 @@
 6,pizza-pizza-pizza.com,pizza pizza pizza pizza pizza pizza pizza pizza pizza pizza,1`;
 
     /**
-     * Parse raw dataset into structured JavaScript objects
+     * Parses the CSV dataset into structured records
      */
     function parseData(csvText) {
       const lines = csvText.trim().split("\n");
@@ -808,25 +699,17 @@
     const PAGES = parseData(RAW_DATA);
     const DAMPING_FACTOR = 0.85;
 
-    /* ==========================================================================
-       ALGORITHM 1: OLD WAY (WORD FREQUENCY)
-       ========================================================================== */
     /**
-     * Calculates the frequency of the search term in each page.
-     * N is used as repeated rounds/weight multiplier so both algorithms share N.
+     * Algorithm 1: Word Frequency (The Old Way)
      */
     function calculateWordFrequency(pages, searchWord, N) {
-      if (!searchWord || searchWord.trim() === "") {
-        searchWord = "pizza";
-      }
+      if (!searchWord || searchWord.trim() === "") searchWord = "pizza";
       const cleanWord = searchWord.trim().toLowerCase();
-      // Regular expression with word boundary or substring match
       const regex = new RegExp(`\\b${escapeRegExp(cleanWord)}\\b`, "gi");
 
       const results = pages.map(page => {
         const matches = page.text.match(regex);
         const singleCount = matches ? matches.length : 0;
-        // Total instances across N rounds
         const totalCount = singleCount * N;
         return {
           id: page.id,
@@ -842,22 +725,16 @@
       return results;
     }
 
-    /* ==========================================================================
-       ALGORITHM 2: PAGERANK
-       ========================================================================== */
     /**
-     * Executes the standard PageRank algorithm for N iterations.
-     * Records intermediate milestone iterations for convergence display.
+     * Algorithm 2: PageRank (Damping factor = 0.85, equal initial scores 1/M)
      */
     function calculatePageRank(pages, N, milestones = []) {
       const M = pages.length;
-      // Start with equal score distribution for each page: 1 / M
       let scores = {};
       pages.forEach(p => {
         scores[p.id] = 1.0 / M;
       });
 
-      // Map out-degrees and incoming linkers for fast graph traversal
       const outDegrees = {};
       const inLinks = {};
 
@@ -868,42 +745,33 @@
 
       pages.forEach(p => {
         p.linksTo.forEach(targetId => {
-          if (inLinks[targetId]) {
-            inLinks[targetId].push(p.id);
-          }
+          if (inLinks[targetId]) inLinks[targetId].push(p.id);
         });
       });
 
-      // Store milestone snapshots
       const milestoneSnapshots = {};
       const milestoneSet = new Set(milestones);
 
-      // Iterate exactly N times
       for (let iter = 1; iter <= N; iter++) {
         let nextScores = {};
         const randomTeleport = (1.0 - DAMPING_FACTOR) / M;
 
-        // Standard PageRank formula: PR(p) = (1-d)/M + d * SUM( PR(q) / L(q) )
         pages.forEach(p => {
           let sumIn = 0;
           inLinks[p.id].forEach(qId => {
             const outDeg = outDegrees[qId];
-            if (outDeg > 0) {
-              sumIn += scores[qId] / outDeg;
-            }
+            if (outDeg > 0) sumIn += scores[qId] / outDeg;
           });
           nextScores[p.id] = randomTeleport + (DAMPING_FACTOR * sumIn);
         });
 
         scores = nextScores;
 
-        // If current iteration is a recorded milestone, snapshot it
         if (milestoneSet.has(iter)) {
           milestoneSnapshots[iter] = { ...scores };
         }
       }
 
-      // Convert final scores to array and sort descending
       const finalRanked = pages.map(p => ({
         id: p.id,
         url: p.url,
@@ -919,31 +787,35 @@
     }
 
     /**
-     * Choose appropriate milestone iterations based on N (e.g. 1, 10, 100, N)
+     * Chooses clean milestone iteration columns for the progression table
      */
     function getMilestoneIterations(N) {
       const candidates = [1, 5, 10, 25, 50, 100, 500, 1000, N];
       const milestones = [];
       candidates.forEach(val => {
-        if (val <= N && !milestones.includes(val)) {
-          milestones.push(val);
-        }
+        if (val <= N && !milestones.includes(val)) milestones.push(val);
       });
-      if (!milestones.includes(N)) {
-        milestones.push(N);
-      }
-      // Keep up to 5 milestone columns for clean table display
-      if (milestones.length > 5) {
-        return [1, 5, 10, Math.floor(N / 2), N];
-      }
+      if (!milestones.includes(N)) milestones.push(N);
+      if (milestones.length > 5) return [1, 5, 10, Math.floor(N / 2), N];
       return milestones;
     }
 
-    /* ==========================================================================
-       8. DOM RENDERING & UI UPDATES
-       ========================================================================== */
+    /**
+     * Count how many pages link to a target page
+     */
+    function countInLinks(pageId) {
+      let count = 0;
+      PAGES.forEach(p => {
+        if (p.linksTo.includes(pageId)) count++;
+      });
+      return count;
+    }
+
+    /**
+     * Main Render function
+     */
     function renderComparison() {
-      // 1. Validate Input N
+      // 1. Validate N
       const inputN = document.getElementById("input-iterations");
       let N = parseInt(inputN.value, 10);
       if (isNaN(N) || N < 1) N = 1;
@@ -953,7 +825,7 @@
       // 2. Get Search Term
       const searchWord = document.getElementById("input-word").value || "pizza";
 
-      // 3. Update Labels
+      // 3. Update Status Badges
       document.getElementById("label-runs-count").textContent = N.toLocaleString();
       document.getElementById("label-pagerank-iterations").textContent = N.toLocaleString();
 
@@ -961,32 +833,29 @@
       const wordFreqResults = calculateWordFrequency(PAGES, searchWord, N);
       const maxCount = Math.max(...wordFreqResults.map(r => r.totalCount), 1);
 
-      // Render Old Way Table
+      // Render Old Way Table (1998 style)
       const tbodyOld = document.getElementById("tbody-old-way");
       tbodyOld.innerHTML = "";
       wordFreqResults.forEach((row, index) => {
         const percent = Math.min(100, Math.round((row.totalCount / maxCount) * 100));
         const tr = document.createElement("tr");
 
-        // Special highlight on Page 6 (spam page)
-        if (row.id === 6) {
-          tr.className = "highlight-spam";
-        }
+        if (row.id === 6) tr.className = "retro-spam-row";
 
         tr.innerHTML = `
-          <td class="rank-num ${index === 0 ? 'rank-top-1' : ''}">#${index + 1}</td>
-          <td><span class="page-id-badge">Page ${row.id}</span></td>
+          <td class="rank-td ${index === 0 ? 'rank-1' : ''}">${index + 1}</td>
+          <td style="text-align:center;"><strong>[${row.id}]</strong></td>
           <td>
-            <div class="page-url">${row.url}</div>
-            <div class="page-url-sub">${row.text.substring(0, 36)}...</div>
+            <a href="http://${row.url}" class="retro-url-text" target="_blank">${row.url}</a>
+            <div class="retro-snippet">${row.text.substring(0, 42)}...</div>
+          </td>
+          <td style="font-family:'Courier New', monospace; font-weight:bold;">
+            ${row.totalCount.toLocaleString()}
+            <div style="font-size:0.7rem; color:#666; font-family:serif;">(${row.singleCount} &times; ${N})</div>
           </td>
           <td>
-            <div class="score-num">${row.totalCount.toLocaleString()}</div>
-            <div style="font-size: 0.72rem; color: var(--text-muted);">${row.singleCount} per round &times; ${N}</div>
-          </td>
-          <td class="score-cell">
-            <div class="bar-track">
-              <div class="bar-fill bar-old-fill" style="width: ${percent}%;"></div>
+            <div class="retro-bar-wrap" title="${percent}%">
+              <div class="retro-bar-fill-old" style="width: ${percent}%;"></div>
             </div>
           </td>
         `;
@@ -999,71 +868,58 @@
       const rankedPR = pageRankOutput.ranked;
       const maxScore = Math.max(...rankedPR.map(r => r.score), 0.0001);
 
-      // Render PageRank Table
+      // Render PageRank Table (1998 style)
       const tbodyPR = document.getElementById("tbody-pagerank");
       tbodyPR.innerHTML = "";
       rankedPR.forEach((row, index) => {
         const percent = Math.min(100, Math.round((row.score / maxScore) * 100));
         const tr = document.createElement("tr");
 
-        // Highlight Page 2 as the authentic winner, Page 6 as spam defeated
         if (row.id === 2 && index === 0) {
-          tr.className = "highlight-winner";
+          tr.className = "retro-winner-row";
         } else if (row.id === 6) {
-          tr.className = "highlight-spam";
+          tr.className = "retro-spam-row";
         }
 
         tr.innerHTML = `
-          <td class="rank-num ${index === 0 ? 'rank-top-1' : ''}">#${index + 1}</td>
-          <td><span class="page-id-badge">Page ${row.id}</span></td>
+          <td class="rank-td ${index === 0 ? 'rank-1' : ''}">${index + 1}</td>
+          <td style="text-align:center;"><strong>[${row.id}]</strong></td>
           <td>
-            <div class="page-url">${row.url}</div>
-            <div class="page-url-sub">In-links: ${countInLinks(row.id)} pages</div>
+            <a href="http://${row.url}" class="retro-url-text" target="_blank">${row.url}</a>
+            <div class="retro-snippet">${countInLinks(row.id)} in-links pointing here</div>
+          </td>
+          <td style="font-family:'Courier New', monospace; font-weight:bold; color:#000080;">
+            ${row.score.toFixed(5)}
+            <div style="font-size:0.7rem; color:#666; font-family:serif;">(${(row.score * 100).toFixed(1)}%)</div>
           </td>
           <td>
-            <div class="score-num" style="color: var(--accent-cyan);">${row.score.toFixed(5)}</div>
-            <div style="font-size: 0.72rem; color: var(--text-muted);">${(row.score * 100).toFixed(2)}% weight</div>
-          </td>
-          <td class="score-cell">
-            <div class="bar-track">
-              <div class="bar-fill bar-pagerank-fill" style="width: ${percent}%;"></div>
+            <div class="retro-bar-wrap" title="${percent}%">
+              <div class="retro-bar-fill-pagerank" style="width: ${percent}%;"></div>
             </div>
           </td>
         `;
         tbodyPR.appendChild(tr);
       });
 
-      // 6. Render PageRank Iteration Convergence Progression Table
+      // 6. Render Iteration Progression Table
       renderProgressionTable(PAGES, milestones, pageRankOutput.milestones);
     }
 
     /**
-     * Counts how many pages link to a given target page ID
-     */
-    function countInLinks(pageId) {
-      let count = 0;
-      PAGES.forEach(p => {
-        if (p.linksTo.includes(pageId)) count++;
-      });
-      return count;
-    }
-
-    /**
-     * Renders table showing how PageRank scores evolve across milestones
+     * Renders the iteration convergence table
      */
     function renderProgressionTable(pages, milestones, milestoneData) {
       const headerRow = document.getElementById("progression-header-row");
-      headerRow.innerHTML = `<th>Page</th><th>URL</th>`;
+      headerRow.innerHTML = `<th>Page ID</th><th>Page URL</th>`;
       milestones.forEach(m => {
         const th = document.createElement("th");
-        th.textContent = `Iter ${m}`;
+        th.textContent = `Iteration ${m}`;
         headerRow.appendChild(th);
       });
 
       const tbody = document.getElementById("tbody-progression");
       tbody.innerHTML = "";
 
-      // Sort by final PageRank score for readability
       const lastMilestone = milestones[milestones.length - 1];
       const sortedPages = [...pages].sort((a, b) => {
         const scoreA = milestoneData[lastMilestone] ? milestoneData[lastMilestone][a.id] : 0;
@@ -1073,17 +929,17 @@
 
       sortedPages.forEach(p => {
         const tr = document.createElement("tr");
-        if (p.id === 6) tr.className = "highlight-spam";
-        if (p.id === 2) tr.className = "highlight-winner";
+        if (p.id === 6) tr.className = "retro-spam-row";
+        if (p.id === 2) tr.className = "retro-winner-row";
 
         let html = `
-          <td><span class="page-id-badge">Page ${p.id}</span></td>
-          <td style="font-weight: 500;">${p.url}</td>
+          <td style="text-align:center;"><strong>[Page ${p.id}]</strong></td>
+          <td><a href="http://${p.url}" class="retro-url-text" target="_blank">${p.url}</a></td>
         `;
 
         milestones.forEach(m => {
           const val = milestoneData[m] ? milestoneData[m][p.id] : 0;
-          html += `<td>${val.toFixed(5)}</td>`;
+          html += `<td style="font-family:'Courier New', monospace;">${val.toFixed(5)}</td>`;
         });
 
         tr.innerHTML = html;
@@ -1095,9 +951,7 @@
       return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    /* ==========================================================================
-       9. COSMIC CANVAS STARFIELD & CUSTOM DICE UPLOAD
-       ========================================================================== */
+    /* Cosmic Canvas Starfield */
     const canvas = document.getElementById("stars-canvas");
     const ctx = canvas.getContext("2d");
     let stars = [];
@@ -1130,7 +984,6 @@
         ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
         ctx.fill();
 
-        // Twinkle effect
         star.alpha += (Math.random() - 0.5) * 0.03;
         if (star.alpha < 0.2) star.alpha = 0.2;
         if (star.alpha > 0.95) star.alpha = 0.95;
@@ -1142,7 +995,7 @@
     resizeCanvas();
     drawStars();
 
-    /* Custom Dice Image Upload Support */
+    /* Custom Dice Image Upload */
     const diceUpload = document.getElementById("dice-upload-input");
     const userDiceLayer = document.getElementById("user-dice-layer");
     const btnResetBg = document.getElementById("btn-reset-bg");
@@ -1156,7 +1009,6 @@
           userDiceLayer.style.backgroundImage = `url('${evt.target.result}')`;
           userDiceLayer.style.opacity = "0.35";
           btnResetBg.style.display = "inline-block";
-          // Dim CSS dice slightly when user photo is active
           cssDiceStage.style.opacity = "0.45";
         };
         reader.readAsDataURL(file);
@@ -1171,8 +1023,12 @@
       cssDiceStage.style.opacity = "0.85";
     });
 
-    /* Event Listeners for Run button & Enter key */
+    /* Event Listeners */
     document.getElementById("btn-run").addEventListener("click", renderComparison);
+    document.getElementById("btn-lucky").addEventListener("click", () => {
+      document.getElementById("input-word").value = "pizza";
+      renderComparison();
+    });
     document.getElementById("input-iterations").addEventListener("keydown", (e) => {
       if (e.key === "Enter") renderComparison();
     });
@@ -1180,7 +1036,7 @@
       if (e.key === "Enter") renderComparison();
     });
 
-    // Initial Execution on Load
+    // Run on initial load
     renderComparison();
   </script>
 </body>
