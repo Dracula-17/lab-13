@@ -3,967 +3,1185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Saktiman | Student, Linux &amp; Code Explorer</title>
-  <meta name="description" content="Portfolio of Saktiman — a student exploring Linux internals, command line automation, and software development.">
-
-  <!-- ==================== GOOGLE FONTS ==================== -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <title>Search Ranking Comparison: Word Frequency vs. PageRank</title>
   <style>
     /* ==========================================================================
-       CSS VARIABLES & THEME SETUP
-       Color palette strictly based on specifications:
-       - Deep black background: #0a0a0a
-       - Electric yellow accent: #FFD600
-       - Off-white text: #f5f5f5
-       - Subtle dark gray cards: #161616
+       1. CSS VARIABLES & COSMIC THEME SETUP
        ========================================================================== */
     :root {
-      --bg-color: #0a0a0a;
-      --card-bg: #161616;
-      --card-border: #262626;
-      --card-hover-border: #FFD600;
-      --accent-yellow: #FFD600;
-      --accent-yellow-glow: rgba(255, 214, 0, 0.18);
-      --accent-yellow-dim: rgba(255, 214, 0, 0.1);
-      --text-main: #f5f5f5;
-      --text-muted: #9e9e9e;
-      --text-dim: #666666;
-      --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --transition-base: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-      --container-max-width: 1040px;
+      --bg-space: #05070f;
+      --panel-bg: rgba(14, 20, 36, 0.82);
+      --panel-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --bar-old: linear-gradient(90deg, #f59e0b, #ef4444);
+      --bar-pagerank: linear-gradient(90deg, #38bdf8, #818cf8);
+      --font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    /* ==========================================================================
-       RESET & BASE STYLES
-       ========================================================================== */
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-size: 16px;
-    }
-
     body {
-      font-family: var(--font-heading);
-      background-color: var(--bg-color);
+      font-family: var(--font-stack);
+      background-color: var(--bg-space);
       color: var(--text-main);
-      line-height: 1.65;
+      min-height: 100vh;
+      line-height: 1.5;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      position: relative;
     }
 
-    /* Subtle terminal grid background pattern */
-    body::before {
-      content: "";
+    /* ==========================================================================
+       2. BACKGROUND: COSMIC UNIVERSE & ROTATING 3D DICE
+       ========================================================================== */
+    #space-background {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     }
 
-    /* Accessibility focus styling */
-    :focus-visible {
-      outline: 2px solid var(--accent-yellow);
-      outline-offset: 3px;
+    /* Starry Canvas */
+    #stars-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-      transition: var(--transition-base);
+    /* Optional User Custom Dice Image Background Layer */
+    #user-dice-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      mix-blend-mode: screen;
     }
 
-    .container {
-      width: 90%;
-      max-width: var(--container-max-width);
-      margin: 0 auto;
+    /* Realistic 3D CSS Space Dice Container */
+    .dice-universe-stage {
+      position: absolute;
+      top: 25%;
+      right: 12%;
+      width: 160px;
+      height: 160px;
+      perspective: 900px;
+      opacity: 0.85;
+      transition: transform 0.3s ease;
+    }
+
+    .cube-dice {
+      width: 100%;
+      height: 100%;
       position: relative;
-      z-index: 1;
+      transform-style: preserve-3d;
+      animation: tumbleDice 24s linear infinite;
+    }
+
+    /* Slow, natural cosmic tumbling */
+    @keyframes tumbleDice {
+      0% {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0);
+      }
+      25% {
+        transform: rotateX(90deg) rotateY(180deg) rotateZ(45deg) translateY(-25px);
+      }
+      50% {
+        transform: rotateX(180deg) rotateY(360deg) rotateZ(90deg) translateY(0);
+      }
+      75% {
+        transform: rotateX(270deg) rotateY(540deg) rotateZ(135deg) translateY(25px);
+      }
+      100% {
+        transform: rotateX(360deg) rotateY(720deg) rotateZ(180deg) translateY(0);
+      }
+    }
+
+    /* 3D Dice Faces */
+    .dice-face {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle at 30% 30%, #ffffff 0%, #dcdfe4 65%, #94a3b8 100%);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 22px;
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.4), 0 0 25px rgba(56, 189, 248, 0.25);
+      display: grid;
+      padding: 16px;
+      backface-visibility: visible;
+    }
+
+    /* Precise 3D Translations for 160px Cube */
+    .face-1 { transform: rotateY(0deg) translateZ(80px); }
+    .face-2 { transform: rotateY(90deg) translateZ(80px); }
+    .face-3 { transform: rotateY(180deg) translateZ(80px); }
+    .face-4 { transform: rotateY(-90deg) translateZ(80px); }
+    .face-5 { transform: rotateX(90deg) translateZ(80px); }
+    .face-6 { transform: rotateX(-90deg) translateZ(80px); }
+
+    /* Dice Pips */
+    .pip {
+      width: 22px;
+      height: 22px;
+      background: radial-gradient(circle at 35% 35%, #2a2a2a 0%, #000000 80%);
+      border-radius: 50%;
+      align-self: center;
+      justify-self: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+    .pip.red {
+      background: radial-gradient(circle at 35% 35%, #ef4444 0%, #991b1b 80%);
+    }
+
+    /* Face Layouts */
+    .face-1 { display: flex; justify-content: center; align-items: center; }
+    .face-2 { display: flex; justify-content: space-between; }
+    .face-2 .pip:nth-child(2) { align-self: flex-end; }
+    .face-3 { display: flex; justify-content: space-between; }
+    .face-3 .pip:nth-child(2) { align-self: center; }
+    .face-3 .pip:nth-child(3) { align-self: flex-end; }
+    .face-4 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+    .face-5 { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+    .face-5 .pip:nth-child(1) { grid-area: 1 / 1; }
+    .face-5 .pip:nth-child(2) { grid-area: 1 / 3; }
+    .face-5 .pip:nth-child(3) { grid-area: 2 / 2; }
+    .face-5 .pip:nth-child(4) { grid-area: 3 / 1; }
+    .face-5 .pip:nth-child(5) { grid-area: 3 / 3; }
+    .face-6 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 8px; }
+
+    /* ==========================================================================
+       3. FOREGROUND APP CONTENT & SEMI-TRANSPARENT PANELS
+       ========================================================================== */
+    .app-wrapper {
+      position: relative;
+      z-index: 10;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem 4rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f8fafc 0%, #38bdf8 60%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.6rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Control Panel Box */
+    .control-panel {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 1.4rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      flex: 1 1 200px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .input-group input {
+      background: rgba(8, 12, 22, 0.75);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-group input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-run {
+      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+      color: #ffffff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 2.2rem;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      height: 48px;
+    }
+
+    .btn-run:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(56, 189, 248, 0.55);
+      background: linear-gradient(135deg, #7dd3fc 0%, #1d4ed8 100%);
+    }
+
+    /* Background Customizer Switch */
+    .bg-custom-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .bg-custom-pill label {
+      cursor: pointer;
+      color: var(--accent-cyan);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .bg-custom-pill input[type="file"] {
+      display: none;
+    }
+
+    /* Key Insight Highlight Banner */
+    .spam-insight-banner {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.18) 0%, rgba(168, 85, 247, 0.15) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .spam-badge-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .spam-insight-content h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fca5a5;
+      margin-bottom: 0.2rem;
+    }
+
+    .spam-insight-content p {
+      font-size: 0.92rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .spam-insight-content strong {
+      color: #fef08a;
     }
 
     /* ==========================================================================
-       STICKY NAVIGATION BAR
-       - Sticky positioning with frosted backdrop
-       - Yellow underline animation on link hover
+       4. COMPARISON SIDE-BY-SIDE LAYOUT
        ========================================================================== */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: rgba(10, 10, 10, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.15rem 0;
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      margin-bottom: 2.5rem;
     }
 
-    .nav-container {
+    .ranking-card {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ranking-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
+      border-bottom: 1px solid var(--panel-border);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
     }
 
-    .brand-logo {
-      font-family: var(--font-mono);
-      font-size: 1.2rem;
+    .ranking-header h2 {
+      font-size: 1.35rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .brand-logo .prompt-symbol {
-      color: var(--accent-yellow);
-      font-weight: 700;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      list-style: none;
-    }
-
-    .nav-link {
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      position: relative;
-      padding-bottom: 4px;
-      letter-spacing: 0.3px;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: var(--accent-yellow);
-      transition: width 0.25s ease-in-out;
-    }
-
-    .nav-link:hover {
-      color: var(--text-main);
-    }
-
-    .nav-link:hover::after,
-    .nav-link:focus-visible::after {
-      width: 100%;
-    }
-
-    /* ==========================================================================
-       HERO SECTION
-       - Large impactful heading with electric yellow highlight
-       - Terminal typing animation line
-       - Action buttons
-       - Small terminal window preview motif
-       ========================================================================== */
-    .hero {
-      padding: 6.5rem 0 5rem;
-    }
-
-    .hero-content {
-      max-width: 860px;
-    }
-
-    /* Terminal Prompt Pill */
-    .terminal-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 0.5rem 1.1rem;
-      border-radius: 999px;
-      margin-bottom: 2rem;
-      color: var(--text-muted);
-    }
-
-    .terminal-pill .prompt {
-      color: var(--accent-yellow);
-      font-weight: 700;
-    }
-
-    .terminal-pill .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 16px;
-      background-color: var(--accent-yellow);
-      animation: blink 1s step-start infinite;
-      vertical-align: middle;
-      margin-left: 2px;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .hero-title {
-      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -1.5px;
-      margin-bottom: 1.4rem;
-    }
-
-    .highlight-yellow {
-      color: var(--accent-yellow);
-      position: relative;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      color: var(--text-muted);
-      line-height: 1.7;
-      max-width: 680px;
-      margin-bottom: 2.4rem;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1.1rem;
-      flex-wrap: wrap;
-      margin-bottom: 3.5rem;
-    }
-
-    .btn {
-      font-family: var(--font-mono);
-      font-size: 0.92rem;
-      font-weight: 600;
-      padding: 0.85rem 1.75rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: var(--transition-base);
-    }
-
-    .btn-primary {
-      background-color: var(--accent-yellow);
-      color: #000000;
-      border: 1px solid var(--accent-yellow);
-      box-shadow: 0 4px 18px rgba(255, 214, 0, 0.25);
-    }
-
-    .btn-primary:hover {
-      background-color: #ffe033;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255, 214, 0, 0.38);
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--accent-yellow);
-      color: var(--accent-yellow);
-      background-color: var(--accent-yellow-dim);
-      transform: translateY(-2px);
-    }
-
-    /* Terminal Window Motif */
-    .terminal-window {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
-      max-width: 720px;
-    }
-
-    .terminal-header {
-      background: #111111;
-      padding: 0.65rem 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      border-bottom: 1px solid var(--card-border);
     }
 
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .terminal-dot.red { background: #ff5f56; }
-    .terminal-dot.yellow { background: #ffbd2e; }
-    .terminal-dot.green { background: #27c93f; }
-
-    .terminal-title {
+    .method-tag {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--text-dim);
-      margin-left: auto;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .terminal-body {
-      padding: 1.25rem 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      line-height: 1.75;
+    .tag-old {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .tag-pagerank {
+      background: rgba(56, 189, 248, 0.18);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    /* Ranked Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
       color: var(--text-muted);
-    }
-
-    .terminal-line {
-      display: block;
-    }
-
-    .terminal-line .term-prompt {
-      color: var(--accent-yellow);
-      margin-right: 0.5rem;
-      font-weight: bold;
-    }
-
-    .terminal-line .term-cmd {
-      color: var(--text-main);
-    }
-
-    .terminal-output {
-      color: #90a4ae;
-      padding-left: 1.25rem;
-      border-left: 2px solid #222222;
-      margin: 0.4rem 0 0.8rem 0;
-    }
-
-    /* ==========================================================================
-       SECTION COMMON STYLES
-       ========================================================================== */
-    .section {
-      padding: 5.5rem 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .section-tag {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--accent-yellow);
-      letter-spacing: 1.5px;
+      font-weight: 600;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      display: block;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.6px;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--panel-border);
     }
 
-    .section-title {
-      font-size: clamp(2rem, 3.5vw, 2.75rem);
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 1rem;
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
     }
 
-    .section-lead {
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rank-num {
+      font-weight: 800;
+      font-size: 1rem;
       color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 620px;
-      line-height: 1.7;
+      width: 32px;
     }
 
-    /* ==========================================================================
-       ABOUT SECTION
-       ========================================================================== */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 3.5rem;
-      align-items: start;
-      margin-top: 2rem;
-    }
+    .rank-top-1 { color: #f59e0b; }
+    .rank-top-2 { color: #cbd5e1; }
+    .rank-top-3 { color: #d97706; }
 
-    .about-text p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      margin-bottom: 1.25rem;
-    }
-
-    .about-text strong {
+    .page-id-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.15rem 0.45rem;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 4px;
       color: var(--text-main);
       font-weight: 600;
     }
 
-    .skills-block {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 2rem;
-    }
-
-    .skills-block-title {
-      font-family: var(--font-mono);
-      font-size: 0.95rem;
-      color: var(--accent-yellow);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.65rem;
-    }
-
-    .skill-tag {
+    .page-url {
       font-family: var(--font-mono);
       font-size: 0.85rem;
-      background-color: #1a1a1a;
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-      padding: 0.45rem 0.9rem;
-      border-radius: 6px;
-      transition: var(--transition-base);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      color: #e2e8f0;
+      word-break: break-all;
     }
 
-    .skill-tag::before {
-      content: '#';
-      color: var(--accent-yellow);
+    .page-url-sub {
       font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
 
-    .skill-tag:hover {
-      border-color: var(--accent-yellow);
-      background-color: var(--accent-yellow-dim);
-      color: var(--accent-yellow);
-      transform: translateY(-2px);
+    /* Special Highlight for Page 6 Keyword Spam */
+    tr.highlight-spam {
+      background: rgba(239, 68, 68, 0.12);
+      border-left: 3px solid var(--accent-red);
     }
+
+    tr.highlight-winner {
+      background: rgba(16, 185, 129, 0.12);
+      border-left: 3px solid var(--accent-green);
+    }
+
+    /* Relative Visual Bars */
+    .score-cell {
+      min-width: 130px;
+    }
+
+    .score-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bar-old-fill { background: var(--bar-old); }
+    .bar-pagerank-fill { background: var(--bar-pagerank); }
 
     /* ==========================================================================
-       PROJECTS SECTION
-       - 3 Cards with titles, descriptions, tech tags, and links
-       - Card hover: lifts slightly, yellow border glow
+       5. PAGERANK ITERATION CONVERGENCE PROGRESSION
        ========================================================================== */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .project-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 2rem 1.75rem;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
-    }
-
-    /* Hover effect: lifts slightly and gets yellow border glow */
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--card-hover-border);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 0 0 22px var(--accent-yellow-glow);
-    }
-
-    .project-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.25rem;
-    }
-
-    .project-card-num {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent-yellow);
-      background: var(--accent-yellow-dim);
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 214, 0, 0.2);
-    }
-
-    .project-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 0.85rem;
-      color: var(--text-main);
-    }
-
-    .project-desc {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.65;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .project-tag {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: #b0b0b0;
-      background: #111111;
-      border: 1px solid var(--card-border);
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-    }
-
-    .project-link {
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--accent-yellow);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      margin-top: auto;
-    }
-
-    .project-link span {
-      transition: transform 0.2s ease;
-    }
-
-    .project-link:hover span {
-      transform: translateX(4px);
-    }
-
-    /* ==========================================================================
-       CONTACT / FOOTER SECTION
-       ========================================================================== */
-    .contact-box {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 3.5rem 2.5rem;
-      text-align: center;
-      max-width: 760px;
-      margin: 2rem auto 0;
-    }
-
-    .contact-title {
-      font-size: clamp(1.8rem, 3vw, 2.3rem);
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .contact-desc {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      margin-bottom: 2.2rem;
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.25rem;
-      flex-wrap: wrap;
+    .progression-section {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
       margin-bottom: 2rem;
     }
 
-    .footer {
-      padding: 3rem 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
+    .progression-section h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .progression-section p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .progression-table th {
+      font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .progression-table td {
       font-family: var(--font-mono);
       font-size: 0.85rem;
-      color: var(--text-dim);
     }
 
-    .footer-brand {
-      color: var(--accent-yellow);
-      font-weight: 600;
-    }
-
-    .footer-sub {
-      margin-top: 0.4rem;
-      font-size: 0.78rem;
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
 
     /* ==========================================================================
-       SCROLL FADE-IN ANIMATIONS
+       6. RESPONSIVE MEDIA QUERIES
        ========================================================================== */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: opacity, transform;
-    }
-
-    .fade-in.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ==========================================================================
-       RESPONSIVENESS (TABLET & MOBILE)
-       ========================================================================== */
-    @media (max-width: 960px) {
-      .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .about-grid {
+    @media (max-width: 980px) {
+      .comparison-grid {
         grid-template-columns: 1fr;
-        gap: 2.5rem;
+      }
+      .dice-universe-stage {
+        display: none; /* Hide background 3D dice on small screens to keep UI crisp */
       }
     }
 
     @media (max-width: 640px) {
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        gap: 1.2rem;
-      }
-      .nav-link {
-        font-size: 0.82rem;
-      }
-      .hero {
-        padding: 4.5rem 0 3.5rem;
-      }
-      .hero-buttons {
+      .control-panel {
         flex-direction: column;
+        align-items: stretch;
       }
-      .btn {
+      .btn-run {
         width: 100%;
         justify-content: center;
-      }
-      .contact-box {
-        padding: 2.5rem 1.5rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- ==================== STICKY NAVIGATION ==================== -->
-  <header class="navbar">
-    <div class="container nav-container">
-      <a href="#home" class="brand-logo" aria-label="Saktiman Home">
-        <span class="prompt-symbol">&gt;_</span> Saktiman
-      </a>
-      <nav aria-label="Main Navigation">
-        <ul class="nav-links">
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#skills" class="nav-link">Skills</a></li>
-          <li><a href="#projects" class="nav-link">Projects</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
+  <!-- ==================== BACKGROUND: COSMIC SKY & 3D CSS DICE ==================== -->
+  <div id="space-background">
+    <!-- Starfield Canvas Animation -->
+    <canvas id="stars-canvas"></canvas>
+
+    <!-- Optional User Uploaded Custom Dice Image Layer -->
+    <div id="user-dice-layer"></div>
+
+    <!-- Realistic 3D Rotating Space Dice -->
+    <div class="dice-universe-stage" aria-hidden="true" id="css-dice-stage">
+      <div class="cube-dice">
+        <!-- Face 1 -->
+        <div class="dice-face face-1">
+          <div class="pip red"></div>
+        </div>
+        <!-- Face 2 -->
+        <div class="dice-face face-2">
+          <div class="pip"></div>
+          <div class="pip"></div>
+        </div>
+        <!-- Face 3 -->
+        <div class="dice-face face-3">
+          <div class="pip"></div>
+          <div class="pip red"></div>
+          <div class="pip"></div>
+        </div>
+        <!-- Face 4 -->
+        <div class="dice-face face-4">
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+        </div>
+        <!-- Face 5 -->
+        <div class="dice-face face-5">
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip red"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+        </div>
+        <!-- Face 6 -->
+        <div class="dice-face face-6">
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <main id="home">
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="hero container fade-in">
-      <div class="hero-content">
-        <!-- Terminal command pill with typing animation -->
-        <div class="terminal-pill">
-          <span class="prompt">$</span>
-          <span id="typing-text">learning --linux --coding</span><span class="cursor"></span>
+  <!-- ==================== FOREGROUND CONTENT ==================== -->
+  <div class="app-wrapper">
+
+    <!-- Header Section -->
+    <header>
+      <h1>Search Ranking Comparison</h1>
+      <p>
+        Compare how the <strong>Old Way (Word Frequency)</strong> ranks web pages vs. how Google's revolutionary <strong>PageRank Algorithm</strong> solves keyword spam through authority link graphs.
+      </p>
+    </header>
+
+    <!-- Interactive Controls Bar -->
+    <section class="control-panel">
+      <!-- Input: Iterations N -->
+      <div class="input-group">
+        <label for="input-iterations">Iterations / Rounds (N: 1 to 10,000)</label>
+        <input type="number" id="input-iterations" min="1" max="10000" value="20" required>
+      </div>
+
+      <!-- Input: Search Word -->
+      <div class="input-group">
+        <label for="input-word">Search Word</label>
+        <input type="text" id="input-word" value="pizza" required>
+      </div>
+
+      <!-- Run Button -->
+      <button class="btn-run" id="btn-run" type="button">
+        <span>▶ Run Comparison</span>
+      </button>
+
+      <!-- Background Dice Customizer -->
+      <div class="bg-custom-pill">
+        <span>🎲 Background: 3D Space Dice</span>
+        <label for="dice-upload-input">Upload Dice Photo</label>
+        <input type="file" id="dice-upload-input" accept="image/*">
+        <button id="btn-reset-bg" style="display:none; background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; text-decoration:underline;">Reset</button>
+      </div>
+    </section>
+
+    <!-- Key Insight Alert Banner -->
+    <aside class="spam-insight-banner">
+      <div class="spam-badge-icon">⚠️</div>
+      <div class="spam-insight-content">
+        <h3>The Keyword Spam Flaw Revealed</h3>
+        <p id="spam-insight-text">
+          Notice <strong>Page 6 (pizza-pizza-pizza.com)</strong>: It stuffed the search word "pizza" 10 times to rig the <em>Old Way</em> at Rank #1. But in <em>PageRank</em>, it plunges to the bottom because <strong>no reputable website links to it</strong>! Meanwhile, <strong>Page 2 (best-pizza-pune.com)</strong> receives links from 4 other sites, capturing true authority.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Side-by-Side Comparison -->
+    <div class="comparison-grid">
+
+      <!-- LEFT SIDE: Old Way (Word Frequency) -->
+      <section class="ranking-card">
+        <div class="ranking-header">
+          <h2><span>📄</span> Old Way</h2>
+          <span class="method-tag tag-old">Word Frequency</span>
         </div>
-
-        <h1 class="hero-title">
-          Hi, I’m <span class="highlight-yellow">learning to build things</span>.
-        </h1>
-
-        <p class="hero-subtitle">
-          A student exploring the depth of Linux, command-line interfaces, and software development. 
-          Focusing on simple architectures, automation scripts, and practical tools.
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Ranks pages purely by how many times the search term appears in text. Evaluated over <span id="label-runs-count">20</span> query rounds.
         </p>
 
-        <div class="hero-buttons">
-          <a href="#projects" class="btn btn-primary">
-            View Projects &darr;
-          </a>
-          <a href="#contact" class="btn btn-secondary">
-            Get in Touch &rarr;
-          </a>
+        <div class="table-container">
+          <table id="table-old-way">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Page</th>
+                <th>URL</th>
+                <th>Occurrences</th>
+                <th class="score-cell">Density Bar</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-old-way">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
         </div>
+      </section>
 
-        <!-- Terminal Window Motif -->
-        <div class="terminal-window" aria-hidden="true">
-          <div class="terminal-header">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">saktiman@linux-dev:~</span>
-          </div>
-          <div class="terminal-body">
-            <div class="terminal-line">
-              <span class="term-prompt">saktiman@linux-dev:~$</span>
-              <span class="term-cmd">whoami</span>
-            </div>
-            <div class="terminal-output">
-              Student developer passionate about operating systems &amp; automation.
-            </div>
-            <div class="terminal-line">
-              <span class="term-prompt">saktiman@linux-dev:~$</span>
-              <span class="term-cmd">cat current_status.md</span>
-            </div>
-            <div class="terminal-output">
-              • Operating System: Arch / Ubuntu Linux<br>
-              • Daily Tools: Bash, Git, Python, ffmpeg<br>
-              • Current Mission: Mastering shell scripting &amp; clean code
-            </div>
-          </div>
+      <!-- RIGHT SIDE: PageRank -->
+      <section class="ranking-card">
+        <div class="ranking-header">
+          <h2><span>🕸️</span> PageRank</h2>
+          <span class="method-tag tag-pagerank">Link Graph (d = 0.85)</span>
         </div>
-
-      </div>
-    </section>
-
-    <!-- ==================== ABOUT SECTION ==================== -->
-    <section class="section fade-in" id="about">
-      <div class="container">
-        <span class="section-tag">// 01. ABOUT ME</span>
-        <h2 class="section-title">Curiosity at the Terminal Prompt</h2>
-        <p class="section-lead">
-          Peeling back the abstraction layers to understand how computers actually work.
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Calculates authority based on the web's hyperlink graph after exactly <span id="label-pagerank-iterations">20</span> iterations.
         </p>
 
-        <div class="about-grid">
-          <div class="about-text">
-            <p>
-              I am a student currently immersing myself in the world of <strong>Linux and software engineering</strong>. 
-              Rather than staying inside visual tools and heavy IDEs, I spend my time exploring shell environments, 
-              writing scripts, and automating repetitive tasks from scratch.
-            </p>
-            <p>
-              Learning Linux taught me respect for the Unix philosophy: write programs that do one thing well, 
-              handle text streams, and compose together effortlessly. Whether I'm stitching together a Bash pipeline, 
-              manipulating video streams with <strong>ffmpeg</strong>, or building utilities in <strong>Python</strong>, 
-              I strive for simplicity, efficiency, and continuous learning.
-            </p>
-          </div>
-
-          <!-- Skills Block -->
-          <div class="skills-block" id="skills">
-            <div class="skills-block-title">
-              <span>$ ls -l skills/</span>
-            </div>
-            <div class="skill-tags">
-              <span class="skill-tag">Linux</span>
-              <span class="skill-tag">Bash</span>
-              <span class="skill-tag">Python</span>
-              <span class="skill-tag">Git</span>
-              <span class="skill-tag">ffmpeg</span>
-              <span class="skill-tag">Terminal</span>
-              <span class="skill-tag">CLI Tooling</span>
-              <span class="skill-tag">Automation</span>
-            </div>
-          </div>
+        <div class="table-container">
+          <table id="table-pagerank">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Page</th>
+                <th>URL</th>
+                <th>Score</th>
+                <th class="score-cell">Authority Bar</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-pagerank">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
         </div>
+      </section>
+
+    </div>
+
+    <!-- PAGERANK PROGRESSION OVER ITERATIONS -->
+    <section class="progression-section">
+      <h3><span>📈</span> PageRank Score Convergence Over Iterations</h3>
+      <p>
+        Observe how the probability scores stabilize as iterations increase toward mathematical convergence:
+      </p>
+
+      <div class="table-container">
+        <table class="progression-table" id="table-progression">
+          <thead>
+            <tr id="progression-header-row">
+              <th>Page</th>
+              <th>URL</th>
+              <!-- Milestones populated dynamically (e.g. Iter 1, Iter 10, Iter N) -->
+            </tr>
+          </thead>
+          <tbody id="tbody-progression">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- ==================== PROJECTS SECTION ==================== -->
-    <section class="section fade-in" id="projects">
-      <div class="container">
-        <span class="section-tag">// 02. PROJECTS</span>
-        <h2 class="section-title">Featured Work</h2>
-        <p class="section-lead">
-          Practical utilities built while learning command line tools and programming.
-        </p>
+    <!-- Footer -->
+    <footer>
+      <p>Single-file pure HTML, CSS &amp; JavaScript implementation &bull; Damping factor: 0.85</p>
+    </footer>
 
-        <div class="projects-grid">
-          <!-- Project 1: ffmpeg GIF Maker -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-card-num">01</span>
-            </div>
-            <h3 class="project-title">ffmpeg GIF Maker</h3>
-            <p class="project-desc">
-              Converts video clips into optimized, high-fidelity GIFs using two-pass custom palette generation in ffmpeg. Reduces file sizes drastically while maintaining crisp frame rates.
-            </p>
-            <div class="project-tags">
-              <span class="project-tag">ffmpeg</span>
-              <span class="project-tag">Bash</span>
-              <span class="project-tag">Shell Script</span>
-            </div>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span>&rarr;</span>
-            </a>
-          </article>
+  </div>
 
-          <!-- Project 2: QR Code Generator -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-card-num">02</span>
-            </div>
-            <h3 class="project-title">QR Code Generator</h3>
-            <p class="project-desc">
-              Creates high-resolution QR codes from arbitrary text strings, WiFi credentials, or URLs. Features customizable error correction, terminal-based previews, and multiple export formats.
-            </p>
-            <div class="project-tags">
-              <span class="project-tag">Python</span>
-              <span class="project-tag">CLI</span>
-              <span class="project-tag">Pillow</span>
-            </div>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span>&rarr;</span>
-            </a>
-          </article>
-
-          <!-- Project 3: Learning Log -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-card-num">03</span>
-            </div>
-            <h3 class="project-title">Learning Log</h3>
-            <p class="project-desc">
-              A running daily record documenting commands mastered, bugs solved, system configuration tweaks, and reflections. Automatically committed and versioned via Git hooks.
-            </p>
-            <div class="project-tags">
-              <span class="project-tag">Git</span>
-              <span class="project-tag">Markdown</span>
-              <span class="project-tag">Linux</span>
-            </div>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span>&rarr;</span>
-            </a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== CONTACT SECTION ==================== -->
-    <section class="section fade-in" id="contact">
-      <div class="container">
-        <div class="contact-box">
-          <span class="section-tag">// 03. CONTACT</span>
-          <h2 class="contact-title">Let's Connect</h2>
-          <p class="contact-desc">
-            Whether you want to discuss Linux tips, share command-line scripts, or collaborate on open-source coding projects, my inbox is always open.
-          </p>
-
-          <div class="contact-links">
-            <a href="mailto:saktiman@example.com" class="btn btn-primary">
-              Send Email
-            </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-              GitHub Profile
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer container">
-    <p>
-      &copy; 2026 <span class="footer-brand">Saktiman</span>. Designed &amp; built with semantic HTML &amp; CSS.
-    </p>
-    <p class="footer-sub">
-      Powered by Linux, open source, and curiosity.
-    </p>
-  </footer>
-
-  <!-- ==================== INLINE JAVASCRIPT ==================== -->
+  <!-- ==========================================================================
+       7. JAVASCRIPT LOGIC & ALGORITHMS
+       ========================================================================== -->
   <script>
     /**
-     * Typing animation for terminal command prompt
-     * Cycles through learning tags with realistic typing & backspacing
+     * RAW DATASET PROVIDED IN INSTRUCTIONS:
+     * Format: page,url,text,links_to (links separated by ;)
      */
-    const phrases = [
-      "learning --linux --coding",
-      "automating --with --ffmpeg",
-      "building --python --cli-tools",
-      "mastering --bash --git"
-    ];
+    const RAW_DATA = `1,pune-food-guide.com,Where to eat in Pune - vada pav and biryani and pizza,2
+2,best-pizza-pune.com,Fresh wood-fired pizza made daily - try our cheese pizza,1;3
+3,college-canteen-blog.com,Student reviews of canteen food and chai and Friday pizza,2;4
+4,pizza-recipes-home.com,Make pizza at home - pizza dough and pizza sauce,2;5
+5,cheap-eats-pune.com,Good food under 100 rupees - misal and dosa and pizza slices,2
+6,pizza-pizza-pizza.com,pizza pizza pizza pizza pizza pizza pizza pizza pizza pizza,1`;
 
-    const typingElement = document.getElementById("typing-text");
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 90;
-
-    function typeLoop() {
-      const currentPhrase = phrases[phraseIndex];
-
-      if (isDeleting) {
-        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-        charIndex--;
-        typingSpeed = 45;
-      } else {
-        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-        charIndex++;
-        typingSpeed = 95;
-      }
-
-      if (!isDeleting && charIndex === currentPhrase.length) {
-        // Pause at the end of the phrase
-        typingSpeed = 2200;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        typingSpeed = 400;
-      }
-
-      setTimeout(typeLoop, typingSpeed);
+    /**
+     * Parse raw dataset into structured JavaScript objects
+     */
+    function parseData(csvText) {
+      const lines = csvText.trim().split("\n");
+      return lines.map(line => {
+        const parts = line.split(",");
+        const pageId = parseInt(parts[0].trim(), 10);
+        const url = parts[1].trim();
+        const text = parts[2].trim();
+        const linksTo = parts[3] ? parts[3].split(";").map(id => parseInt(id.trim(), 10)).filter(Boolean) : [];
+        return {
+          id: pageId,
+          url: url,
+          text: text,
+          linksTo: linksTo
+        };
+      });
     }
 
-    // Start typing loop after DOM is loaded
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(typeLoop, 600);
+    const PAGES = parseData(RAW_DATA);
+    const DAMPING_FACTOR = 0.85;
 
-      /**
-       * IntersectionObserver for Smooth Fade-In on Scroll
-       */
-      const fadeObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+    /* ==========================================================================
+       ALGORITHM 1: OLD WAY (WORD FREQUENCY)
+       ========================================================================== */
+    /**
+     * Calculates the frequency of the search term in each page.
+     * N is used as repeated rounds/weight multiplier so both algorithms share N.
+     */
+    function calculateWordFrequency(pages, searchWord, N) {
+      if (!searchWord || searchWord.trim() === "") {
+        searchWord = "pizza";
+      }
+      const cleanWord = searchWord.trim().toLowerCase();
+      // Regular expression with word boundary or substring match
+      const regex = new RegExp(`\\b${escapeRegExp(cleanWord)}\\b`, "gi");
+
+      const results = pages.map(page => {
+        const matches = page.text.match(regex);
+        const singleCount = matches ? matches.length : 0;
+        // Total instances across N rounds
+        const totalCount = singleCount * N;
+        return {
+          id: page.id,
+          url: page.url,
+          singleCount: singleCount,
+          totalCount: totalCount,
+          text: page.text
+        };
+      });
+
+      // Sort descending by total occurrences
+      results.sort((a, b) => b.totalCount - a.totalCount || a.id - b.id);
+      return results;
+    }
+
+    /* ==========================================================================
+       ALGORITHM 2: PAGERANK
+       ========================================================================== */
+    /**
+     * Executes the standard PageRank algorithm for N iterations.
+     * Records intermediate milestone iterations for convergence display.
+     */
+    function calculatePageRank(pages, N, milestones = []) {
+      const M = pages.length;
+      // Start with equal score distribution for each page: 1 / M
+      let scores = {};
+      pages.forEach(p => {
+        scores[p.id] = 1.0 / M;
+      });
+
+      // Map out-degrees and incoming linkers for fast graph traversal
+      const outDegrees = {};
+      const inLinks = {};
+
+      pages.forEach(p => {
+        outDegrees[p.id] = p.linksTo.length;
+        inLinks[p.id] = [];
+      });
+
+      pages.forEach(p => {
+        p.linksTo.forEach(targetId => {
+          if (inLinks[targetId]) {
+            inLinks[targetId].push(p.id);
           }
         });
-      }, {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px"
       });
 
-      document.querySelectorAll(".fade-in").forEach(section => {
-        fadeObserver.observe(section);
+      // Store milestone snapshots
+      const milestoneSnapshots = {};
+      const milestoneSet = new Set(milestones);
+
+      // Iterate exactly N times
+      for (let iter = 1; iter <= N; iter++) {
+        let nextScores = {};
+        const randomTeleport = (1.0 - DAMPING_FACTOR) / M;
+
+        // Standard PageRank formula: PR(p) = (1-d)/M + d * SUM( PR(q) / L(q) )
+        pages.forEach(p => {
+          let sumIn = 0;
+          inLinks[p.id].forEach(qId => {
+            const outDeg = outDegrees[qId];
+            if (outDeg > 0) {
+              sumIn += scores[qId] / outDeg;
+            }
+          });
+          nextScores[p.id] = randomTeleport + (DAMPING_FACTOR * sumIn);
+        });
+
+        scores = nextScores;
+
+        // If current iteration is a recorded milestone, snapshot it
+        if (milestoneSet.has(iter)) {
+          milestoneSnapshots[iter] = { ...scores };
+        }
+      }
+
+      // Convert final scores to array and sort descending
+      const finalRanked = pages.map(p => ({
+        id: p.id,
+        url: p.url,
+        score: scores[p.id]
+      }));
+
+      finalRanked.sort((a, b) => b.score - a.score || a.id - b.id);
+
+      return {
+        ranked: finalRanked,
+        milestones: milestoneSnapshots
+      };
+    }
+
+    /**
+     * Choose appropriate milestone iterations based on N (e.g. 1, 10, 100, N)
+     */
+    function getMilestoneIterations(N) {
+      const candidates = [1, 5, 10, 25, 50, 100, 500, 1000, N];
+      const milestones = [];
+      candidates.forEach(val => {
+        if (val <= N && !milestones.includes(val)) {
+          milestones.push(val);
+        }
       });
+      if (!milestones.includes(N)) {
+        milestones.push(N);
+      }
+      // Keep up to 5 milestone columns for clean table display
+      if (milestones.length > 5) {
+        return [1, 5, 10, Math.floor(N / 2), N];
+      }
+      return milestones;
+    }
+
+    /* ==========================================================================
+       8. DOM RENDERING & UI UPDATES
+       ========================================================================== */
+    function renderComparison() {
+      // 1. Validate Input N
+      const inputN = document.getElementById("input-iterations");
+      let N = parseInt(inputN.value, 10);
+      if (isNaN(N) || N < 1) N = 1;
+      if (N > 10000) N = 10000;
+      inputN.value = N;
+
+      // 2. Get Search Term
+      const searchWord = document.getElementById("input-word").value || "pizza";
+
+      // 3. Update Labels
+      document.getElementById("label-runs-count").textContent = N.toLocaleString();
+      document.getElementById("label-pagerank-iterations").textContent = N.toLocaleString();
+
+      // 4. Compute Word Frequency
+      const wordFreqResults = calculateWordFrequency(PAGES, searchWord, N);
+      const maxCount = Math.max(...wordFreqResults.map(r => r.totalCount), 1);
+
+      // Render Old Way Table
+      const tbodyOld = document.getElementById("tbody-old-way");
+      tbodyOld.innerHTML = "";
+      wordFreqResults.forEach((row, index) => {
+        const percent = Math.min(100, Math.round((row.totalCount / maxCount) * 100));
+        const tr = document.createElement("tr");
+
+        // Special highlight on Page 6 (spam page)
+        if (row.id === 6) {
+          tr.className = "highlight-spam";
+        }
+
+        tr.innerHTML = `
+          <td class="rank-num ${index === 0 ? 'rank-top-1' : ''}">#${index + 1}</td>
+          <td><span class="page-id-badge">Page ${row.id}</span></td>
+          <td>
+            <div class="page-url">${row.url}</div>
+            <div class="page-url-sub">${row.text.substring(0, 36)}...</div>
+          </td>
+          <td>
+            <div class="score-num">${row.totalCount.toLocaleString()}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${row.singleCount} per round &times; ${N}</div>
+          </td>
+          <td class="score-cell">
+            <div class="bar-track">
+              <div class="bar-fill bar-old-fill" style="width: ${percent}%;"></div>
+            </div>
+          </td>
+        `;
+        tbodyOld.appendChild(tr);
+      });
+
+      // 5. Compute PageRank
+      const milestones = getMilestoneIterations(N);
+      const pageRankOutput = calculatePageRank(PAGES, N, milestones);
+      const rankedPR = pageRankOutput.ranked;
+      const maxScore = Math.max(...rankedPR.map(r => r.score), 0.0001);
+
+      // Render PageRank Table
+      const tbodyPR = document.getElementById("tbody-pagerank");
+      tbodyPR.innerHTML = "";
+      rankedPR.forEach((row, index) => {
+        const percent = Math.min(100, Math.round((row.score / maxScore) * 100));
+        const tr = document.createElement("tr");
+
+        // Highlight Page 2 as the authentic winner, Page 6 as spam defeated
+        if (row.id === 2 && index === 0) {
+          tr.className = "highlight-winner";
+        } else if (row.id === 6) {
+          tr.className = "highlight-spam";
+        }
+
+        tr.innerHTML = `
+          <td class="rank-num ${index === 0 ? 'rank-top-1' : ''}">#${index + 1}</td>
+          <td><span class="page-id-badge">Page ${row.id}</span></td>
+          <td>
+            <div class="page-url">${row.url}</div>
+            <div class="page-url-sub">In-links: ${countInLinks(row.id)} pages</div>
+          </td>
+          <td>
+            <div class="score-num" style="color: var(--accent-cyan);">${row.score.toFixed(5)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${(row.score * 100).toFixed(2)}% weight</div>
+          </td>
+          <td class="score-cell">
+            <div class="bar-track">
+              <div class="bar-fill bar-pagerank-fill" style="width: ${percent}%;"></div>
+            </div>
+          </td>
+        `;
+        tbodyPR.appendChild(tr);
+      });
+
+      // 6. Render PageRank Iteration Convergence Progression Table
+      renderProgressionTable(PAGES, milestones, pageRankOutput.milestones);
+    }
+
+    /**
+     * Counts how many pages link to a given target page ID
+     */
+    function countInLinks(pageId) {
+      let count = 0;
+      PAGES.forEach(p => {
+        if (p.linksTo.includes(pageId)) count++;
+      });
+      return count;
+    }
+
+    /**
+     * Renders table showing how PageRank scores evolve across milestones
+     */
+    function renderProgressionTable(pages, milestones, milestoneData) {
+      const headerRow = document.getElementById("progression-header-row");
+      headerRow.innerHTML = `<th>Page</th><th>URL</th>`;
+      milestones.forEach(m => {
+        const th = document.createElement("th");
+        th.textContent = `Iter ${m}`;
+        headerRow.appendChild(th);
+      });
+
+      const tbody = document.getElementById("tbody-progression");
+      tbody.innerHTML = "";
+
+      // Sort by final PageRank score for readability
+      const lastMilestone = milestones[milestones.length - 1];
+      const sortedPages = [...pages].sort((a, b) => {
+        const scoreA = milestoneData[lastMilestone] ? milestoneData[lastMilestone][a.id] : 0;
+        const scoreB = milestoneData[lastMilestone] ? milestoneData[lastMilestone][b.id] : 0;
+        return scoreB - scoreA;
+      });
+
+      sortedPages.forEach(p => {
+        const tr = document.createElement("tr");
+        if (p.id === 6) tr.className = "highlight-spam";
+        if (p.id === 2) tr.className = "highlight-winner";
+
+        let html = `
+          <td><span class="page-id-badge">Page ${p.id}</span></td>
+          <td style="font-weight: 500;">${p.url}</td>
+        `;
+
+        milestones.forEach(m => {
+          const val = milestoneData[m] ? milestoneData[m][p.id] : 0;
+          html += `<td>${val.toFixed(5)}</td>`;
+        });
+
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    /* ==========================================================================
+       9. COSMIC CANVAS STARFIELD & CUSTOM DICE UPLOAD
+       ========================================================================== */
+    const canvas = document.getElementById("stars-canvas");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      const count = Math.floor((canvas.width * canvas.height) / 3200);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5 + 0.3,
+          alpha: Math.random() * 0.8 + 0.2,
+          speed: Math.random() * 0.02 + 0.005
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+        ctx.fill();
+
+        // Twinkle effect
+        star.alpha += (Math.random() - 0.5) * 0.03;
+        if (star.alpha < 0.2) star.alpha = 0.2;
+        if (star.alpha > 0.95) star.alpha = 0.95;
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    drawStars();
+
+    /* Custom Dice Image Upload Support */
+    const diceUpload = document.getElementById("dice-upload-input");
+    const userDiceLayer = document.getElementById("user-dice-layer");
+    const btnResetBg = document.getElementById("btn-reset-bg");
+    const cssDiceStage = document.getElementById("css-dice-stage");
+
+    diceUpload.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          userDiceLayer.style.backgroundImage = `url('${evt.target.result}')`;
+          userDiceLayer.style.opacity = "0.35";
+          btnResetBg.style.display = "inline-block";
+          // Dim CSS dice slightly when user photo is active
+          cssDiceStage.style.opacity = "0.45";
+        };
+        reader.readAsDataURL(file);
+      }
     });
+
+    btnResetBg.addEventListener("click", function() {
+      userDiceLayer.style.backgroundImage = "none";
+      userDiceLayer.style.opacity = "0";
+      btnResetBg.style.display = "none";
+      diceUpload.value = "";
+      cssDiceStage.style.opacity = "0.85";
+    });
+
+    /* Event Listeners for Run button & Enter key */
+    document.getElementById("btn-run").addEventListener("click", renderComparison);
+    document.getElementById("input-iterations").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") renderComparison();
+    });
+    document.getElementById("input-word").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") renderComparison();
+    });
+
+    // Initial Execution on Load
+    renderComparison();
   </script>
 </body>
 </html>
-koon tha
